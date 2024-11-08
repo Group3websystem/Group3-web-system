@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(express.json());
 
 const allowedOrigins = [
-    
+    'https://group3websystem.github.io',
     'http://127.0.0.1:5500',
     'http://localhost:5500'
 ];
