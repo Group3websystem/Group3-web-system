@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     console.log('Data sent successfully to Node.js server');
                     setTimeout(()=> {
-                    window.location.href="../sia.html";
+                    window.location.href="sia.html";
                      
                   
                     },5000);
