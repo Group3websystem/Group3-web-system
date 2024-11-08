@@ -10,42 +10,105 @@
     <div class="notification-container">
         <button id="backButton" class="back-button" onclick="window.location.href='sia.html'">Back</button>
         <h1>Notifications</h1>
-        <button id="showNotificationsButton">Show Notifications</button>
-        <div id="notificationsList" class="notification-box"></div>
+        <button id="showNotificationsButton">Show Log ins</button>
+
+        <!-- Notification List -->
+        <div id="notificationsList" class="notification-box">
+            <ul id="notificationList"></ul>
+        </div>
     </div>
 
     <script>
-        function loadNotifications() {
-            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            const notificationsList = document.getElementById("notificationsList");
-            notificationsList.innerHTML = '';
+        // Initialize variables to track displayed logs and notification count
+        let displayedLogs = new Set();
+        let notificationCount = 0;
 
-            if (notifications.length === 0) {
-                notificationsList.innerHTML = "<p>No notifications available</p>";
-            } else {
-                notifications.forEach((notification, index) => {
-                    const notificationItem = document.createElement("div");
-                    notificationItem.className = "notification-item";
-                    notificationItem.innerHTML = `
-                        <p>Action: ${notification.action}</p>
-                        ${notification.email ? `<p>Email: ${notification.email}</p>` : ''}
-                        ${notification.search ? `<p>Search: ${notification.search}</p>` : ''}
-                        <p>Time: ${notification.timestamp}</p>
-                        <button onclick="deleteNotification(${index})">Delete</button>
-                    `;
-                    notificationsList.appendChild(notificationItem);
+        // Function to update the notification display (assuming you have this implemented)
+        function updateNotificationDisplay() {
+            // Implement your logic to update the notification count/display here
+            // For example, updating a badge or icon
+            console.log(`Notification Count: ${notificationCount}`);
+        }
+
+        const fetchLogs = async () => {
+            try {
+                // Fetch notifications from the local server
+                const response = await fetch('http://localhost:3000/logs');
+                if (!response.ok) throw new Error('Failed to fetch logs');
+
+                const logs = await response.json();
+                const logEntries = logs.data || logs;
+
+                console.log("Fetched logs:", logEntries); // Diagnostics
+
+                // Update notification count based on the number of fetched logs
+                notificationCount = logEntries.length > 0 ? 1 : 0;
+                updateNotificationDisplay();
+
+                // Get the notification list container
+                const notificationList = document.getElementById("notificationList");
+                notificationList.innerHTML = ''; // Clear previous notifications if desired
+
+                // Loop through all logs and display them in the notification list
+                logEntries.forEach((log) => {
+                    const logId = log.id || log.timestamp || log.created_at;
+
+                    if (!displayedLogs.has(logId)) {
+                        displayedLogs.add(logId);
+
+                        try {
+                            // Check if `log.content` exists and is a valid JSON string before parsing
+                            const content = log.content ? JSON.parse(log.content) : null;
+
+                            console.log('Parsed Content:', content); // Inspect the content structure
+
+                            if (content) {
+                                const email = content.email || 'No Email';
+                                const timestamp = content.timestamp || log.created_at || 'No Timestamp';
+
+                                const listItem = document.createElement('li');
+                                listItem.className = 'notification-item';
+                                listItem.innerHTML = `
+                                    <span class="notification-email">${email}</span>
+                                    <span class="notification-timestamp">${timestamp}</span>
+                                    <button class="delete-button" onclick="deleteNotification('${logId}')">Delete</button>
+                                `;
+
+                                // Append the new item to the list
+                                notificationList.appendChild(listItem);
+                            } else {
+                                console.warn('Log content is empty or not JSON formatted:', log.content);
+                            }
+
+                        } catch (error) {
+                            console.error('Error parsing log content:', error);
+                        }
+                    }
                 });
+            } catch (error) {
+                console.error('Failed to fetch or process logs:', error);
             }
+        };
+
+        // Function to delete a notification
+        function deleteNotification(logId) {
+            const notificationList = document.getElementById("notificationList");
+
+            // Find and remove the list item with the corresponding logId
+            const itemToDelete = [...notificationList.children].find(item => item.querySelector('.delete-button').onclick.toString().includes(logId));
+            if (itemToDelete) {
+                itemToDelete.remove(); // Remove the item from the DOM
+                console.log(`Deleted notification with ID: ${logId}`);
+            }
+
+            // Optionally, you can remove the logId from the displayedLogs set if you are tracking it
+            displayedLogs.delete(logId);
+            notificationCount--; // Decrease notification count
+            updateNotificationDisplay(); // Update the display if needed
         }
 
-        function deleteNotification(index) {
-            let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            notifications.splice(index, 1); 
-            localStorage.setItem('notifications', JSON.stringify(notifications)); 
-            loadNotifications();
-        }
-
-        document.getElementById("showNotificationsButton").addEventListener("click", loadNotifications);
+        // Attach event listener to the "Show Notifications" button
+        document.getElementById("showNotificationsButton").addEventListener("click", fetchLogs);
     </script>
 </body>
 </html>

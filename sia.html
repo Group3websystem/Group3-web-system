@@ -7,17 +7,44 @@
     <link rel="stylesheet" href="siaAdmin.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+ #logoutButton {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            width: 100px;
+            border: none;
+            border-radius: 7px;
+            box-shadow: 0 4px #388E3C;
+            transition: all 0.2s ease;
+            height: 50px;
+        }
+
+        #logoutButton:hover {
+            background-color: darkred;
+            color: white;
+        }
+
+      
+
+
+
+    </style>
 </head>
 <body>
+    
     <div class="search-contain">
         <input type="text" placeholder="Search for a city..." class="search-input" id="search-input">
         <button class="search-button" onclick="searchLocation()">
-            <img src="asdffgfff.png" alt="search-icon">
+            <img src="search.png" alt="search-icon">
         </button>
         <button class="notification-button" onclick="window.location.href='notifications.html'">
-            <img id="notificationIcon" src="fffffffff-removebg-preview.png" alt="Notification Icon">
+            <img id="notificationIcon" src="notif.jpeg" alt="Notification Icon">
             <span id="notificationBadge" class="badge" style="display: none;">0</span>
         </button>
+        <button id="logoutButton" onclick="logout()">Logout</button>
        
     </div>
     <div id="map" style="height: 500px;"></div>
@@ -33,6 +60,8 @@
         }).addTo(map);
 
       
+
+       
         async function searchLocation() {
             const city = document.getElementById("search-input").value;
             if (city.trim() === "") {
@@ -60,9 +89,19 @@
             } catch (error) {
                 console.error("Failed to send POST request.", error);
             }
+            
         }
-
-        // Function to send webhook notification with no-cors mode
+        function logout() {
+        // Prompt the user to confirm logging out
+        const confirmLogout = confirm("Are you sure you want to log out?");
+        if (confirmLogout) {
+            
+            window.location.href = 'index.html';  
+        } else {
+            console.log("Logout canceled.");
+        }
+    }
+       /*
         async function sendWebhookNotification(action, city, email) {
             const webhookUrl = 'https://webhook.site/9deb94ef-e05f-47a5-b4c4-e4bd17ccf0db';
             const payload = {
@@ -86,6 +125,7 @@
                 console.log('Webhook notification sent successfully.');
 
                 // Store notification in localStorage
+             
                 const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
                 notifications.push({
                     action: action,
@@ -101,17 +141,11 @@
                 console.error('Error sending webhook notification:', error);
             }
         }
+        */
+     
 
         // Function to update the notification badge count
-        function updateNotificationBadge(count) {
-            const badge = document.getElementById("notificationBadge");
-            if (count > 0) {
-                badge.textContent = count; // Set badge text to count
-                badge.style.display = 'flex'; // Show the badge
-            } else {
-                badge.style.display = 'none'; // Hide the badge if count is 0
-            }
-        }
+      
     </script>
 </body>
 </html>
