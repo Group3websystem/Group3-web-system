@@ -1,0 +1,123 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0px;
+    background-color: lightgreen;
+    padding: 20px;
+}
+
+.search-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    width: 400px;
+    flex: 1;
+    outline: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+    padding: 15px; /* Increase padding for a larger input */
+}
+
+.search-input:focus {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+.search-button {
+    background-color: transparent; /* Keep it transparent */
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    padding: 15px; /* Maintain padding */
+    border-radius: 50%; /* Make the button round */
+    display: flex; /* Enable flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for transform and shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Initial shadow for depth */
+    width: 70px; /* Set a larger width */
+    height: 70px; /* Set a larger height */
+    margin-right: 15px; /* Space between search and notification buttons */
+    margin-left: 10px; /* Add left margin to create space from the search input */
+}
+
+
+.search-button:hover {
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increase shadow on hover for a 3D effect */
+}
+
+
+.search-button img {
+    width: 50px;  /* Make the search icon larger */
+    height: 50px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Make the image round */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+
+.search-contain {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    padding-left: 50px; /* Add padding to the left */
+}
+
+#map {
+    height: 550px;
+    width: 60%;
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-top: 130px;
+}
+
+.notification-button {
+    border: none; /* Remove default button border */
+    background: none; /* Remove default button background */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border-radius: 50%; /* Make the button round */
+    width: 70px; /* Set a larger width */
+    height: 70px; /* Set a larger height */
+    display: flex; /* Enable flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Initial shadow for depth */
+}
+
+.notification-button:hover {
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increase shadow on hover for a 3D effect */
+}
+
+
+#notificationIcon {
+    width: 40px; /* Adjust icon size to fit the larger button */
+    height: 40px; /* Adjust height to match width for a perfect circle */
+    border-radius: 50%; /* Make it round */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+    background-color: #fff; /* Optional: add a background color */
+    padding: 5px; /* Optional: add padding for better appearance */
+    transition: transform 0.2s; /* Smooth transition for scaling */
+}
+
+.notification-button:hover #notificationIcon {
+    transform: scale(1.1); /* Slightly enlarge the icon on hover */
+}
+.badge {
+    position: absolute;
+    top: -5px; /* Adjust position as needed */
+    right: -10px; /* Adjust position as needed */
+    background-color: red; /* Badge color */
+    color: white; /* Text color */
+    border-radius: 50%; /* Make it round */
+    padding: 2px 6px; /* Adjust padding for better appearance */
+    font-size: 12px; /* Adjust font size */
+    font-weight: bold; /* Make text bold */
+    display: flex; /* Center the content */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    min-width: 20px; /* Ensure minimum width */
+    height: 20px; /* Set height for a perfect circle */
+}

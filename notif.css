@@ -1,0 +1,86 @@
+/* notifications.css */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #4CAF50; /* Green background */
+    font-family: Arial, sans-serif;
+}
+
+.notification-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative; /* Added for positioning the back button */
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.notification-box {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.notification-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.notification-item p {
+    margin: 5px 0;
+}
+
+.notification-item button {
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+.notification-item button:hover {
+    background-color: #e60000;
+}
+
+/* Back Button Style */
+.back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #2196F3; /* Blue color */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.back-button:hover {
+    background-color: #0b7dda; /* Darker blue on hover */
+}

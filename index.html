@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="sia.css"> 
+
+   
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyARFX8cYkQe-G7hzNKbbhvQxLDg78thRSw",
+            authDomain: "sia101-activity2-labragu-5a340.firebaseapp.com",
+            projectId: "sia101-activity2-labragu-5a340",
+            storageBucket: "sia101-activity2-labragu-5a340.appspot.com",
+            messagingSenderId: "600685360584",
+            appId: "1:600685360584:web:ddc0153964d9c0914f7cfd"
+        };
+
+        console.log("Initializing Firebase...");
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        console.log("Firebase initialized successfully.");
+
+        async function login() {
+            const email = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            console.log("Attempting Firebase login with email:", email);
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log("Firebase login successful:", userCredential);
+
+                await sendWebhookNotification('User logged in via Firebase', email);
+                
+                console.log("Redirecting to main page.");
+                window.location.href = "sia.html";
+            } catch (error) {
+                console.error("Firebase Login Error:", error);
+                alert("Error: " + error.message);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("loginform");
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                login();
+            });
+        });
+    </script>
+
+    <script>
+        async function sendWebhookNotification(action, email) {
+            const webhookUrl = 'https://webhook.site/9deb94ef-e05f-47a5-b4c4-e4bd17ccf0db';
+            const payload = {
+                action: action,
+                email: email,
+                timestamp: new Date().toISOString(),
+            };
+
+            console.log("Sending webhook with payload:", payload);
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+
+                console.log('Webhook notification sent successfully.');
+
+                // Store notification locally
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                notifications.push(payload);
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+
+            } catch (error) {
+                console.error('Error sending webhook notification:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="gg">LOGIN</h1>
+        <form id="loginform">
+            <input type="text" id="username" name="username" placeholder="Email" required autocomplete="username"><br><br>
+            <input type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password"><br><br>
+            <button type="submit" id="loginButton">Login</button>
+            <button type="button" id="signin" onclick="window.location.href='siasignup.html'">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

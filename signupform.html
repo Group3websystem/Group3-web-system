@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link rel="stylesheet" href="singup.css">
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyARFX8cYkQe-G7hzNKbbhvQxLDg78thRSw",
+            authDomain: "sia101-activity2-labragu-5a340.firebaseapp.com",
+            projectId: "sia101-activity2-labragu-5a340",
+            storageBucket: "sia101-activity2-labragu-5a340.appspot.com",
+            messagingSenderId: "600685360584",
+            appId: "1:600685360584:web:ddc0153964d9c0914f7cfd"
+        };
+
+        console.log("Initializing Firebase...");
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        console.log("Firebase initialized successfully.");
+
+        async function signup(event) {
+            event.preventDefault(); // Prevent form from submitting normally
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            console.log("Attempting Firebase sign-up with email:", email);
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log("Firebase sign-up successful:", userCredential);
+
+                // Show success message
+                const successMessage = document.getElementById("successMessage");
+                successMessage.style.display = "block"; // Display the success message
+
+                // Redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = "loginform.html"; // Redirect to the login page
+                }, 3000); // 3 seconds delay
+            } catch (error) {
+                console.error("Firebase Sign-Up Error:", error);
+                alert("Error: " + error.message); // Display error message if sign-up fails
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("signupform");
+            form.addEventListener("submit", signup);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="gg">Sign Up</h2>
+        <form id="signupform" action="#" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <div class="button-container">
+                <button type="submit" id="signupButton">Sign Up</button>
+                <button type="button" id="cancelButton" onclick="window.location.href='loginform.html'">Cancel</button>
+            </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" style="display:none; color: green; text-align: center; margin-top: 20px;">
+            Account created successfully! Redirecting to login page...
+        </div>
+    </div>
+</body>
+</html>

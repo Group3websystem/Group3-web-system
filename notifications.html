@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="notif.css">
+</head>
+<body>
+    <div class="notification-container">
+        <button id="backButton" class="back-button" onclick="window.location.href='sia.html'">Back</button>
+        <h1>Notifications</h1>
+        <button id="showNotificationsButton">Show Notifications</button>
+        <div id="notificationsList" class="notification-box"></div>
+    </div>
+
+    <script>
+        function loadNotifications() {
+            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            const notificationsList = document.getElementById("notificationsList");
+            notificationsList.innerHTML = '';
+
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = "<p>No notifications available</p>";
+            } else {
+                notifications.forEach((notification, index) => {
+                    const notificationItem = document.createElement("div");
+                    notificationItem.className = "notification-item";
+                    notificationItem.innerHTML = `
+                        <p>Action: ${notification.action}</p>
+                        ${notification.email ? `<p>Email: ${notification.email}</p>` : ''}
+                        ${notification.search ? `<p>Search: ${notification.search}</p>` : ''}
+                        <p>Time: ${notification.timestamp}</p>
+                        <button onclick="deleteNotification(${index})">Delete</button>
+                    `;
+                    notificationsList.appendChild(notificationItem);
+                });
+            }
+        }
+
+        function deleteNotification(index) {
+            let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            notifications.splice(index, 1); 
+            localStorage.setItem('notifications', JSON.stringify(notifications)); 
+            loadNotifications();
+        }
+
+        document.getElementById("showNotificationsButton").addEventListener("click", loadNotifications);
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+/* General body styling */
+body {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: flex-start; /* Align the container at the top */
+    margin: 0;
+    background-color: lightgreen;
+    height: 100vh; /* Full height of the viewport */
+    padding: 20px;
+}
+
+/* Container for the form */
+.container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px; /* Increased padding for a larger form */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Increased shadow for better effect */
+    width: 500px; /* Width for the container */
+    height: 500px; /* Height stays the same */
+    max-width: 100%; /* Ensures it doesn't overflow on smaller screens */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically centers the content inside */
+    margin-top: 150px; /* Pushes the container 50px down from the top */
+}
+
+/* Title styling */
+.gg {
+    font-size: 24px; /* Increased font size */
+    color: black;
+    text-align: center;
+    margin-bottom: 20px; /* Added space below the title */
+}
+
+/* Input field styling */
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 15px; /* Increased padding */
+    margin: 15px 0; /* Increased margin */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    font-size: 16px; /* Increased font size */
+}
+
+/* Placeholder styling */
+input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* Button container to align buttons next to each other */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Sign Up button styling */
+#signupButton {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    width: 48%;
+    border: none;
+    border-radius: 7px;
+    box-shadow: 0 4px #388E3C;
+    transition: all 0.2s ease;
+    padding: 15px; /* Increased padding */
+}
+
+/* Cancel button styling */
+#cancelButton {
+    background-color: #f44336;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    width: 48%;
+    border: none;
+    border-radius: 7px;
+    box-shadow: 0 4px #D32F2F;
+    transition: all 0.2s ease;
+    padding: 15px; /* Increased padding */
+}
+
+/* Button hover effects */
+#signupButton:hover {
+    background-color: darkred;
+    color: white;
+}
+
+#cancelButton:hover {
+    background-color: #d32f2f;
+    color: white;
+}

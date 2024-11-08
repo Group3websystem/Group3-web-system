@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Form</title>
+    <link rel="stylesheet" href="siaAdmin.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="search-contain">
+        <input type="text" placeholder="Search for a city..." class="search-input" id="search-input">
+        <button class="search-button" onclick="searchLocation()">
+            <img src="E:\sirhomer\asdffgfff.png" alt="search-icon">
+        </button>
+        <button class="notification-button" onclick="window.location.href='notifications.html'">
+            <img id="notificationIcon" src="E:\sirhomer\fffffffff-removebg-preview.png" alt="Notification Icon">
+            <span id="notificationBadge" class="badge" style="display: none;">0</span>
+        </button>
+       
+    </div>
+    <div id="map" style="height: 500px;"></div>
+
+    <script>
+       
+        const map = L.map('map').setView([12.8797, 121.7740], 6); 
+
+      
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+      
+        async function searchLocation() {
+            const city = document.getElementById("search-input").value;
+            if (city.trim() === "") {
+                alert("Please enter a city name.");
+                return;
+            }
+
+            try {
+                const geocodeResponse = await fetch(`https://nominatim.openstreetmap.org/search?city=${city}&format=json`);
+                const geocodeData = await geocodeResponse.json();
+
+                if (geocodeData.length > 0) {
+                    const { lat, lon } = geocodeData[0];
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(`City: ${city}`)
+                        .openPopup();
+                    console.log(`Map updated to city: ${city}`);
+
+                    // Send webhook notification
+                    await sendWebhookNotification('City searched', city, null);
+                } else {
+                    alert("City not found.");
+                }
+            } catch (error) {
+                console.error("Failed to send POST request.", error);
+            }
+        }
+
+        // Function to send webhook notification with no-cors mode
+        async function sendWebhookNotification(action, city, email) {
+            const webhookUrl = 'https://webhook.site/9deb94ef-e05f-47a5-b4c4-e4bd17ccf0db';
+            const payload = {
+                action: action,
+                city: city,
+                email: email,
+                timestamp: new Date().toISOString(),
+            };
+
+            console.log("Sending webhook with payload:", payload);
+
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+                console.log('Webhook notification sent successfully.');
+
+                // Store notification in localStorage
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                notifications.push({
+                    action: action,
+                    search: city || '', // Use empty string if city is null (for login)
+                    email: email || '', // Use empty string if email is null (for search)
+                    timestamp: payload.timestamp,
+                });
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+
+                // Update the notification badge
+                updateNotificationBadge(notifications.length);
+            } catch (error) {
+                console.error('Error sending webhook notification:', error);
+            }
+        }
+
+        // Function to update the notification badge count
+        function updateNotificationBadge(count) {
+            const badge = document.getElementById("notificationBadge");
+            if (count > 0) {
+                badge.textContent = count; // Set badge text to count
+                badge.style.display = 'flex'; // Show the badge
+            } else {
+                badge.style.display = 'none'; // Hide the badge if count is 0
+            }
+        }
+    </script>
+</body>
+</html>
